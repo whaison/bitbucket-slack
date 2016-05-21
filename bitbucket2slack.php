@@ -1,13 +1,14 @@
 <?php
 /**
  * BitbucketのPullRequestをSlackに通知します。
+ *Lolipop用 パーミッションは 644
  */
 
 // SlackのAPI Tokenを設定
-define('SLACK_API_TOKEN', 'xoxp-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxx');
+define('SLACK_API_TOKEN', 'xoxp-0000000-0000000000-000000000-0000000000');
 
 // アイコンの画像を指定(適宜変更してください)
-define('ICON_URL','https://s3-ap-northeast-1.amazonaws.com/a4works/public/bitbucket_48.png');
+define('ICON_URL','https://secure.gravatar.com/avatar/72e4031227e1191787447be1767c7ba8.jpg?s=48&d=https%3A%2F%2Fa.slack-edge.com%2F0180%2Fimg%2Favatars%2Fava_0001-48.png');
 
 // BotName(適宜変更してください)
 define('BOT_NAME', 'Bitbucket');
@@ -15,10 +16,10 @@ define('BOT_NAME', 'Bitbucket');
 //----------------------------------------------------------------------------------------------------------------------
 
 // 動作ログを書き込み
-define('USE_SYSTEM_LOG', false);
+define('USE_SYSTEM_LOG', true);
 
 // 画面に結果を表示
-define('USE_DISPLAY_LOG', false);
+define('USE_DISPLAY_LOG', true);
 
 // 主にデバッグ用
 // 有効にする場合は このファイルと同じ階層に tmpフォルダを作成し、適切なパーミッションを設定してください
@@ -31,31 +32,35 @@ define('SLACK_API_URL',"https://slack.com/api/chat.postMessage?token=%%TOKEN%%&c
 
 //----------------------------------------------------------------------------------------------------------------------
 
-systemLog("bitbucket2slack");
+//systemLog("bitbucket2slack");
 
 $channel = "#".$_GET['channel'];
 
-systemLog("request channel:".$channel);
+//systemLog("request channel:".$channel);
 
 if(!$channel){
     $message = 'channel is not set.';
-    error($message);
+     systemLog($message);
+    //error($message);
     exit;
 }
 
 //-------------------------------------------------------------------
 
 $inputPath = 'php://input';
-
+//systemLog("inputPath:".$inputPath);
 // 動作検証様に取得したファイルを使用する場合はここを設定してください
 //$inputPath = "./tmp/request_xxxxxxxxxxxxxx.txt";
+//systemLog("file_get_contents('php://input')=".file_get_contents('php://input'));
 
 $rawJson = file_get_contents($inputPath);
+//systemLog("rawJson:".$rawJson);
 
 if(!$rawJson){
     $message = 'request body is not set. request channel:'.$channel;
-    error($message);
-    exit;
+    systemLog("message:".$message);
+    //error($message);
+    //exit;
 }
 
 // リクエストを保存
@@ -70,7 +75,8 @@ $message = RequestDataFormatter($aryJson);
 if(!$message){
 
     $message = 'request is not supported. request channel:'.$channel. " request data:".$file;
-    error($message);
+    systemLog("message:".$message);
+    //error($message);
     exit;
 }
 
@@ -82,7 +88,8 @@ $messageData = SlackApiSendMessage($message, $channel);
 if($messageData['ok'] !== true){
     // メッセージ送信でエラーの場合
     $message = 'send message_error:'."\n".$message."\n".var_export($messageData, true);
-    error($message);
+    systemLog($message);
+    //error($message);
     exit;
 }
 
@@ -105,6 +112,7 @@ exit;
  * @param $channel
  * @return bool
  */
+
 function SlackApiSendMessage($message, $channel){
 
     $channel  = rawurlencode($channel);
@@ -284,3 +292,6 @@ function RequestDataFormatter($jsonData)
 
 }
 
+ini_set("display_errors", On);
+error_reporting(E_ALL);
+?>
