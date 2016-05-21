@@ -118,9 +118,12 @@ function SlackApiSendMessage($message, $channel){
     $channel  = rawurlencode($channel);
     $message  = rawurlencode($message);
     $username = rawurlencode(BOT_NAME);
+    //$username = rawurlencode(BOT_NAME);
 
+//https://bitbucket.org/account/whaison0422/avatar/32/
     $iconUrl = rawurlencode(ICON_URL);
-
+    $bitbucket_username="whaison0422";
+$bitbucket_iconUrl='https://bitbucket.org/account/'.$bitbucket_username.'/avatar/32/';
     $url = SLACK_API_URL;
     $url = str_replace('%%TEXT%%'    , $message, $url);
     $url = str_replace('%%TOKEN%%'   , SLACK_API_TOKEN , $url);
