@@ -8,7 +8,7 @@
 define('SLACK_API_TOKEN', 'xoxp-0000000-0000000000-000000000-0000000000');
 
 // アイコンの画像を指定(適宜変更してください)
-define('ICON_URL','https://secure.gravatar.com/avatar/72e4031227e1191787447be1767c7ba8.jpg?s=48&d=https%3A%2F%2Fa.slack-edge.com%2F0180%2Fimg%2Favatars%2Fava_0001-48.png');
+define('ICON_URL','https://pbs.twimg.com/profile_images/1203338339/whaison.tumblr.com_01.jpg');
 
 // BotName(適宜変更してください)
 define('BOT_NAME', 'Bitbucket');
